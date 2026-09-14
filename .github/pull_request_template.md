@@ -8,9 +8,9 @@
 
 ## Alterações realizadas
 
-- [ ] 
-- [ ] 
-- [ ] 
+- [ ]
+- [ ]
+- [ ]
 
 ## Requisitos relacionados
 
@@ -21,16 +21,16 @@
 
 ## Critérios de aceitação
 
-- [ ] 
-- [ ] 
-- [ ] 
+- [ ]
+- [ ]
+- [ ]
 
 ## Testes e validação
 
 <!-- Descreva como a alteração foi testada. -->
 
-- 
-- 
+-
+-
 
 ## Evidências
 
