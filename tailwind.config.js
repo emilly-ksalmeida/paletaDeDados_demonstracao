@@ -1,16 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: ["class"],
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
-        ice: "#F7FDFC",
-        cyan: "#38CED6",
-        blue: "#389CD6",
-        green: "#38D673",
-        navy: "#2A50A1",
-        red: "#D6453F",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -18,6 +11,7 @@ export default {
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
+          hover: "hsl(var(--primary-hover))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -26,6 +20,9 @@ export default {
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
+          hover: "hsl(var(--destructive-hover))",
+          light: "hsl(var(--destructive-light))",
+          border: "hsl(var(--destructive-border))",
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
@@ -43,6 +40,14 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        brand: {
+          header: "hsl(var(--brand-header))",
+          "header-foreground": "hsl(var(--brand-header-foreground))",
+          ocean: "hsl(var(--brand-ocean))",
+          "ocean-hover": "hsl(var(--brand-ocean-hover))",
+          "ocean-light": "hsl(var(--brand-ocean-light))",
+          "upload-bar": "hsl(var(--brand-upload-bar))",
         },
       },
       borderRadius: {

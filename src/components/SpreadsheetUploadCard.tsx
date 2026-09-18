@@ -25,9 +25,9 @@ interface SpreadsheetUploadCardProps {
 }
 
 const statusToneStyles: Record<StatusTone, string> = {
-  default: "text-[#5a7a6b]",
-  success: "text-[#14b57a]",
-  error: "border-red-400 bg-red-50 text-red-600",
+  default: "text-muted-foreground",
+  success: "text-primary",
+  error: "border-destructive-border bg-destructive-light text-destructive",
 };
 
 export function SpreadsheetUploadCard({
@@ -51,6 +51,9 @@ export function SpreadsheetUploadCard({
         </CardTitle>
         <CardDescription>
           Selecione a planilha com os dados dos alunos.
+          <p id={hintId} className="text-sm text-muted-foreground">
+            Formatos aceitos: .xlsx, .ods, .csv
+          </p>
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col items-end gap-3">
@@ -67,7 +70,7 @@ export function SpreadsheetUploadCard({
           <Button
             type="button"
             disabled
-            className="bg-[#14b57a] text-white hover:bg-[#0a9263]"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover"
           >
             <Loader2 className="animate-spin" aria-hidden="true" />
             Carregando planilha...
@@ -75,7 +78,7 @@ export function SpreadsheetUploadCard({
         ) : (
           <Button
             asChild
-            className="bg-[#14b57a] text-white hover:bg-[#0a9263]"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover"
           >
             <label htmlFor={inputId}>
               <Upload aria-hidden="true" />
@@ -83,17 +86,14 @@ export function SpreadsheetUploadCard({
             </label>
           </Button>
         )}
-        <p id={hintId} className="text-sm text-[#5a7a6b]">
-          Formatos aceitos: .xlsx, .ods, .csv
-        </p>
         <div
           id={statusId}
           role="status"
           className="flex flex-col items-end gap-1"
         >
           {selectedFileName ? (
-            <p className="text-sm font-medium text-[#1a2e25]">
-              Arquivo: {selectedFileName}
+            <p className="text-sm font-medium text-foreground">
+              Arquivo selecionado: {selectedFileName}
             </p>
           ) : null}
           {statusMessage ? (
@@ -107,12 +107,12 @@ export function SpreadsheetUploadCard({
             </p>
           ) : null}
           {lastUploadLabel ? (
-            <p className="text-sm text-[#5a7a6b]">
+            <p className="text-sm text-muted-foreground">
               Último upload: {lastUploadLabel}
             </p>
           ) : null}
           {shouldWarnAboutMissingData ? (
-            <p className="text-sm text-[#5a7a6b]">
+            <p className="text-sm text-muted-foreground">
               Você já fez upload antes, mas os dados ainda não foram carregados.
             </p>
           ) : null}
