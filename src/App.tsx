@@ -1,26 +1,13 @@
-import "./index.css";
+import { Header } from "./components/Header";
+import { SpreadsheetUploadCard } from "./components/SpreadsheetUploadCard";
 
 function App() {
   return (
     <div className="container mx-auto flex flex-col gap-5 pt-5">
-      <header className="flex flex-row gap-5">
-        <img
-          src="/src/assets/icons/art-palette-svgrepo-com.svg"
-          alt="Paleta de Dados"
-          className="h-10 w-10"
-        />
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight">
-            Paleta de Dados
-          </h1>
-          <h2 className="font-dancing text-lg leading-none">
-            Escola de Artes Oswaldo Verano
-          </h2>
-        </div>
-      </header>
+      <Header />
       <main>
         <section aria-labelledby="upload-heading">
-          <h2 id="upload-heading">Área para upload da planilha</h2>
+          <SpreadsheetUploadCard />
         </section>
         <section aria-labelledby="busca-heading">
           <h2 id="busca-heading">Área de busca</h2>
