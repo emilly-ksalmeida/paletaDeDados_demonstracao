@@ -1,26 +1,117 @@
-import "./index.css";
+import { useState, type ChangeEvent } from "react";
 
-function App() {
+import { Header } from "./components/Header";
+import { SpreadsheetUploadCard } from "./components/SpreadsheetUploadCard";
+import { parseSpreadsheetFile } from "@/lib/spreadsheet/spreadsheet";
+import {
+  formatUploadTimestamp,
+  getLastUploadAt,
+  setLastUploadAt,
+} from "@/lib/storage/uploadMetadata";
+import type { SpreadsheetStudentType } from "@/types/spreadsheetStudentType";
+import type { StatusTone } from "./types/component.types";
+
+export default function App() {
+  //dados extraídos da planilha upload
+  const [rawSpreadsheetData, setRawSpreadsheetData] = useState<
+    SpreadsheetStudentType[]
+  >([]);
+  //nome da planilha selecionada
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+
+  const [statusMessage, setStatusMessage] = useState(
+    "Carregue a planilha para liberar a busca.",
+  );
+  const [statusTone, setStatusTone] = useState<StatusTone>("warning");
+
+  const [isParsing, setIsParsing] = useState(false);
+
+  const [persistedUploadAt, setPersistedUploadAt] = useState(
+    () => getLastUploadAt() ?? "",
+  );
+
+  async function processSpreadsheetUpload(
+    event: ChangeEvent<HTMLInputElement>,
+  ) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const fileName = file.name.toLowerCase();
+    const isSupportedFile =
+      fileName.endsWith(".xlsx") ||
+      fileName.endsWith(".ods") ||
+      fileName.endsWith(".csv");
+
+    if (!isSupportedFile) {
+      setRawSpreadsheetData([]);
+      setSelectedFileName(file.name);
+      setStatusTone("error");
+      setStatusMessage(
+        "Formato inválido. Use apenas arquivos .xlsx, .ods ou .csv.",
+      );
+      event.target.value = "";
+      return;
+    }
+
+    setIsParsing(true);
+    setStatusTone("default");
+    setStatusMessage("Lendo planilha...");
+
+    try {
+      //momento que converte a planilha para objeto JSON
+      const parsedRows = await parseSpreadsheetFile(file);
+      console.log(parsedRows);
+      const currentUploadAt = new Date().toISOString();
+
+      setRawSpreadsheetData(parsedRows);
+      setSelectedFileName(file.name);
+      setPersistedUploadAt(currentUploadAt);
+      setLastUploadAt(currentUploadAt);
+      setStatusTone("success");
+      setStatusMessage(
+        `${parsedRows.length} registro(s) carregado(s) da planilha.`,
+      );
+    } catch (error) {
+      console.log(error);
+
+      setRawSpreadsheetData([]);
+      setSelectedFileName(file.name);
+      setStatusTone("error");
+      setStatusMessage("Não foi possível ler a planilha enviada.");
+    } finally {
+      setIsParsing(false);
+      event.target.value = "";
+    }
+  }
+
+  function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
+    void processSpreadsheetUpload(event);
+  }
+
+  const lastUploadLabel = persistedUploadAt
+    ? formatUploadTimestamp(persistedUploadAt)
+    : "";
+
+  const shouldWarnAboutMissingData =
+    rawSpreadsheetData.length === 0 && Boolean(persistedUploadAt);
+
   return (
-    <div className="container mx-auto flex flex-col gap-5 pt-5">
-      <header className="flex flex-row gap-5">
-        <img
-          src="/src/assets/icons/art-palette-svgrepo-com.svg"
-          alt="Paleta de Dados"
-          className="h-10 w-10"
-        />
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight">
-            Paleta de Dados
-          </h1>
-          <h2 className="font-dancing text-lg leading-none">
-            Escola de Artes Oswaldo Verano
-          </h2>
-        </div>
-      </header>
-      <main>
+    <div>
+      <Header />
+      <main className="container mx-auto flex flex-col gap-5 pt-5">
         <section aria-labelledby="upload-heading">
-          <h2 id="upload-heading">Área para upload da planilha</h2>
+          <SpreadsheetUploadCard
+            selectedFileName={selectedFileName}
+            isParsing={isParsing}
+            statusMessage={statusMessage}
+            statusTone={statusTone}
+            lastUploadLabel={lastUploadLabel}
+            shouldWarnAboutMissingData={shouldWarnAboutMissingData}
+            onFileChange={handleFileChange}
+          />
         </section>
         <section aria-labelledby="busca-heading">
           <h2 id="busca-heading">Área de busca</h2>
@@ -35,5 +126,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

@@ -4,16 +4,52 @@
 @tailwind utilities;
 
 :root {
-  --color-ice: #f7fdfc;
-  --color-cyan: #38ced6;
-  --color-blue: #389cd6;
-  --color-green: #38d673;
-  --color-navy: #2a50a1;
-  --color-red: #d6453f;
+  --background: 154 30% 95%;
+  --foreground: 153 28% 14%;
+  --card: 0 0% 100%;
+  --card-foreground: 153 28% 14%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 153 28% 14%;
+  --primary: 158 80% 39%;
+  --primary-hover: 159 87% 31%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 154 30% 95%;
+  --secondary-foreground: 153 28% 14%;
+  --muted: 154 30% 95%;
+  --muted-foreground: 152 15% 42%;
+  --accent: 154 30% 95%;
+  --accent-foreground: 153 28% 14%;
+  --destructive: 347 77% 50%;
+  --destructive-hover: 347 77% 42%;
+  --destructive-light: 356 100% 97%;
+  --destructive-border: 347 77% 50%;
+  --destructive-foreground: 0 0% 100%;
+
+  --success: 160 84% 25%;
+  --success-light: 152 71% 96%;
+  --success-foreground: 0 0% 100%;
+
+  --warning: 32 95% 44%;
+  --warning-light: 48 100% 96%;
+  --warning-foreground: 0 0% 100%;
+  --border: 151 33% 86%;
+  --input: 151 33% 86%;
+  --ring: 158 80% 39%;
+  --radius: 0.5rem;
+
+  --brand-header: 207 75% 23%;
+  --brand-header-foreground: 0 0% 100%;
+  --brand-ocean: 207 100% 39%;
+  --brand-ocean-hover: 207 100% 31%;
+  --brand-ocean-light: 206 7% 97%;
+  --brand-upload-bar: 160 53% 20%;
 }
 
 @layer base {
+  * {
+    @apply border-border;
+  }
   body {
-    @apply font-sans;
+    @apply bg-background font-sans text-foreground;
   }
 }
