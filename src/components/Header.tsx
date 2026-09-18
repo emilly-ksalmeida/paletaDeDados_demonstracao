@@ -1,6 +1,6 @@
 export function Header() {
   return (
-    <header className="flex flex-row gap-6 justify-start items-center p-4 bg-[#07406e]">
+    <header className="flex flex-row gap-6 justify-start items-center px-28 py-4 bg-[#07406e]">
       <img
         src="/src/assets/icons/art-palette-svgrepo-com.svg"
         alt="Paleta de Dados"
