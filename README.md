@@ -1,4 +1,5 @@
 # paleta_de_dados
+
 Aplicação web desenvolvida como parte do Trabalho de Extensão do curso de Análise e Desenvolvimento de Sistemas (ADS).
 
 O projeto tem como objetivo facilitar a visualização e gestão dos dados de alunos de uma escola de artes plásticas, utilizando uma planilha como fonte de dados. A aplicação transforma os dados da planilha em uma interface web mais organizada, permitindo que a secretaria consulte as informações de forma mais prática.
