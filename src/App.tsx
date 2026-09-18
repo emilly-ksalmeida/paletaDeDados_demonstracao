@@ -9,19 +9,23 @@ import {
   setLastUploadAt,
 } from "@/lib/storage/uploadMetadata";
 import type { SpreadsheetStudentType } from "@/types/spreadsheetStudentType";
+import type { StatusTone } from "./types/component.types";
 
-type StatusTone = "default" | "success" | "error";
-
-function App() {
+export default function App() {
+  //dados extraídos da planilha upload
   const [rawSpreadsheetData, setRawSpreadsheetData] = useState<
     SpreadsheetStudentType[]
   >([]);
+  //nome da planilha selecionada
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+
   const [statusMessage, setStatusMessage] = useState(
     "Carregue a planilha para liberar a busca.",
   );
   const [statusTone, setStatusTone] = useState<StatusTone>("default");
+
   const [isParsing, setIsParsing] = useState(false);
+
   const [persistedUploadAt, setPersistedUploadAt] = useState(
     () => getLastUploadAt() ?? "",
   );
@@ -57,7 +61,9 @@ function App() {
     setStatusMessage("Lendo planilha...");
 
     try {
+      //momento que converte a planilha para objeto JSON
       const parsedRows = await parseSpreadsheetFile(file);
+      console.log(parsedRows);
       const currentUploadAt = new Date().toISOString();
 
       setRawSpreadsheetData(parsedRows);
@@ -120,5 +126,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
