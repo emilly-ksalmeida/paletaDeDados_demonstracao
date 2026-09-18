@@ -1,11 +1,13 @@
 export function Header() {
   return (
     <header className="flex flex-row items-center justify-start gap-6 bg-brand-header px-28 py-4">
-      <img
-        src="/src/assets/icons/art-palette-svgrepo-com.svg"
-        alt="Paleta de Dados"
-        className="h-10 w-10"
-      />
+      <div className="bg-primary p-1 rounded-md">
+        <img
+          src="/src/assets/icons/art-palette-svgrepo-com.svg"
+          alt="Paleta de Dados"
+          className="h-10 w-10"
+        />
+      </div>
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-semibold tracking-tight text-white">
           Paleta de Dados
