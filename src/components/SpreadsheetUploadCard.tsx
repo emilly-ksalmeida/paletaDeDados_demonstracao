@@ -11,8 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-
-type StatusTone = "default" | "success" | "error";
+import type { StatusTone } from "@/types/component.types";
 
 interface SpreadsheetUploadCardProps {
   selectedFileName?: string | null;
@@ -26,8 +25,9 @@ interface SpreadsheetUploadCardProps {
 
 const statusToneStyles: Record<StatusTone, string> = {
   default: "text-muted-foreground",
-  success: "text-primary",
-  error: "border-destructive-border bg-destructive-light text-destructive",
+  success: "border-success bg-success-light text-success",
+  warning: "border-warning bg-warning-light text-warning",
+  error: "border-destructive bg-destructive-light text-destructive",
 };
 
 export function SpreadsheetUploadCard({
@@ -80,7 +80,7 @@ export function SpreadsheetUploadCard({
             asChild
             className="bg-primary text-primary-foreground hover:bg-primary-hover"
           >
-            <label htmlFor={inputId}>
+            <label htmlFor={inputId} className="font-bold">
               <Upload aria-hidden="true" />
               Escolher planilha
             </label>

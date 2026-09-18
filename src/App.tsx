@@ -22,7 +22,7 @@ export default function App() {
   const [statusMessage, setStatusMessage] = useState(
     "Carregue a planilha para liberar a busca.",
   );
-  const [statusTone, setStatusTone] = useState<StatusTone>("default");
+  const [statusTone, setStatusTone] = useState<StatusTone>("warning");
 
   const [isParsing, setIsParsing] = useState(false);
 
