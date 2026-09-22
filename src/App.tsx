@@ -14,6 +14,7 @@ import { hasStudents } from "./lib/storage/hasStudents";
 
 import type { SpreadsheetStudentType } from "@/types/spreadsheetStudentType";
 import type { StatusTone } from "./types/component.types";
+import { listAll } from "./lib/storage/listAll";
 
 export default function App() {
   //dados extraídos da planilha upload
@@ -43,9 +44,11 @@ export default function App() {
     async function checkStoredStudents() {
       const exists = await hasStudents();
       setHasStoredStudents(exists);
-
+      
       if (exists) {
         setStatusTone("default");
+        const students = await listAll();
+        setRawSpreadsheetData(students);
         setStatusMessage("Dados carregados. Busca liberada.");
       } else {
         setStatusTone("warning");
@@ -149,6 +152,7 @@ export default function App() {
         </section>
         <aside aria-labelledby="resultados-heading">
           <h2 id="resultados-heading">Resultados da pesquisa</h2>
+          {JSON.stringify(rawSpreadsheetData[0], null, 2)}
         </aside>
         <section aria-labelledby="dados-heading">
           <h2 id="dados-heading">Dados principais</h2>
