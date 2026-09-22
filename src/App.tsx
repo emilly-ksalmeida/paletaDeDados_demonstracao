@@ -94,6 +94,11 @@ export default function App() {
       //momento que converte a planilha para objeto JSON
       const parsedRows = await parseSpreadsheetFile(file);
       console.log(parsedRows);
+
+      if (parsedRows.length === 0) {
+         throw Error("Esta planilha está vazia");
+      }
+
       const currentUploadAt = new Date().toISOString();
 
       //Adicionando ao banco IndexedDB
@@ -108,9 +113,7 @@ export default function App() {
       setStatusMessage(
         `${parsedRows.length} registro(s) carregado(s) da planilha.`,
       );
-    } catch (error) {
-      console.log(error);
-
+    } catch {
       setRawSpreadsheetData([]);
       setSelectedFileName(file.name);
       setStatusTone("error");
