@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 
 import { SpreadsheetUploadCard } from "./components/SpreadsheetUploadCard";
 import { Header } from "./components/Header";
@@ -10,6 +10,7 @@ import {
   setLastUploadAt,
 } from "@/lib/storage/uploadMetadata";
 import { addStudents } from "./lib/storage/addStudents";
+import { hasStudents } from "./lib/storage/hasStudents";
 
 import type { SpreadsheetStudentType } from "@/types/spreadsheetStudentType";
 import type { StatusTone } from "./types/component.types";
@@ -33,6 +34,27 @@ export default function App() {
   const [persistedUploadAt, setPersistedUploadAt] = useState(
     () => getLastUploadAt() ?? "",
   );
+
+  const [hasStoredStudents, setHasStoredStudents] = useState<boolean | null>(
+    null,
+  );
+
+  useEffect(() => {
+    async function checkStoredStudents() {
+      const exists = await hasStudents();
+      setHasStoredStudents(exists);
+
+      if (exists) {
+        setStatusTone("default");
+        setStatusMessage("Dados carregados. Busca liberada.");
+      } else {
+        setStatusTone("warning");
+        setStatusMessage("Carregue a planilha para liberar a busca.");
+      }
+    }
+
+    void checkStoredStudents();
+  }, []);
 
   //Função para processar o upload da planilha e converter para objeto
   async function processSpreadsheetUpload(
@@ -76,6 +98,7 @@ export default function App() {
 
       setRawSpreadsheetData(parsedRows);
       setSelectedFileName(file.name);
+      setHasStoredStudents(true);
       setPersistedUploadAt(currentUploadAt);
       setLastUploadAt(currentUploadAt);
       setStatusTone("success");
