@@ -1,13 +1,16 @@
 import { useState, type ChangeEvent } from "react";
 
-import { Header } from "./components/Header";
 import { SpreadsheetUploadCard } from "./components/SpreadsheetUploadCard";
+import { Header } from "./components/Header";
+
 import { parseSpreadsheetFile } from "@/lib/spreadsheet/spreadsheet";
 import {
   formatUploadTimestamp,
   getLastUploadAt,
   setLastUploadAt,
 } from "@/lib/storage/uploadMetadata";
+import { addStudents } from "./lib/storage/addStudents";
+
 import type { SpreadsheetStudentType } from "@/types/spreadsheetStudentType";
 import type { StatusTone } from "./types/component.types";
 
@@ -16,6 +19,7 @@ export default function App() {
   const [rawSpreadsheetData, setRawSpreadsheetData] = useState<
     SpreadsheetStudentType[]
   >([]);
+
   //nome da planilha selecionada
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
@@ -30,6 +34,7 @@ export default function App() {
     () => getLastUploadAt() ?? "",
   );
 
+  //Função para processar o upload da planilha e converter para objeto
   async function processSpreadsheetUpload(
     event: ChangeEvent<HTMLInputElement>,
   ) {
@@ -65,6 +70,9 @@ export default function App() {
       const parsedRows = await parseSpreadsheetFile(file);
       console.log(parsedRows);
       const currentUploadAt = new Date().toISOString();
+
+      //Adicionando ao banco IndexedDB
+      await addStudents(parsedRows);
 
       setRawSpreadsheetData(parsedRows);
       setSelectedFileName(file.name);
