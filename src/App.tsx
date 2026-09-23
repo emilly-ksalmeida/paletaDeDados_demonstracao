@@ -2,8 +2,10 @@ import { useEffect, useState, type ChangeEvent } from "react";
 
 import { SpreadsheetUploadCard } from "./components/SpreadsheetUploadCard";
 import { Header } from "./components/Header";
+import { StudentSearchCard } from "./components/StudentSearchCard";
 
 import { parseSpreadsheetFile } from "@/lib/spreadsheet/spreadsheet";
+import { findStudentsByName } from "@/lib/spreadsheet/student-search";
 import {
   formatUploadTimestamp,
   getLastUploadAt,
@@ -35,10 +37,17 @@ export default function App() {
   const [persistedUploadAt, setPersistedUploadAt] = useState(
     () => getLastUploadAt() ?? "",
   );
-
-  const [hasStoredStudents, setHasStoredStudents] = useState<boolean | null>(
+const [hasStoredStudents, setHasStoredStudents] = useState<boolean | null>(
     null,
   );
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<SpreadsheetStudentType[]>(
+    [],
+  );
+
+  function handleSearch(term: string) {
+    setSearchResults(findStudentsByName(rawSpreadsheetData, term));
+  }
 
   useEffect(() => {
     async function checkStoredStudents() {
@@ -96,7 +105,7 @@ export default function App() {
       console.log(parsedRows);
 
       if (parsedRows.length === 0) {
-         throw Error("Esta planilha está vazia");
+        throw Error("Esta planilha está vazia");
       }
 
       const currentUploadAt = new Date().toISOString();
@@ -151,11 +160,24 @@ export default function App() {
           />
         </section>
         <section aria-labelledby="busca-heading">
-          <h2 id="busca-heading">Área de busca</h2>
+          <StudentSearchCard
+            hasSpreadsheetData={hasStoredStudents}
+            searchTerm={searchTerm}
+            onSearchTermChange={setSearchTerm}
+            onSearch={handleSearch}
+          />
         </section>
         <aside aria-labelledby="resultados-heading">
           <h2 id="resultados-heading">Resultados da pesquisa</h2>
-          {JSON.stringify(rawSpreadsheetData[0], null, 2)}
+          {searchResults.length > 0 ? (
+            <p className="text-sm text-muted-foreground">
+              {searchResults.length} aluno(s) encontrado(s).
+            </p>
+          ) : searchTerm ? (
+            <p className="text-sm text-muted-foreground">
+              Nenhum aluno encontrado.
+            </p>
+          ) : null}
         </aside>
         <section aria-labelledby="dados-heading">
           <h2 id="dados-heading">Dados principais</h2>
