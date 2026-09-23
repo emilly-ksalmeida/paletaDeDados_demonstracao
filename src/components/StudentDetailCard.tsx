@@ -1,74 +1,100 @@
-import { User } from "lucide-react";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { getStudentCourse } from "@/lib/spreadsheet/student-course";
 import type { SpreadsheetStudentType } from "@/types/spreadsheetStudentType";
 
 interface StudentDetailCardProps {
   student: SpreadsheetStudentType | null;
+  onViewPhoto?: () => void;
+  onEdit?: () => void;
 }
 
-const fields = [
-  { label: "Nome", key: "nome_completo" as const },
-  { label: "Telefone", key: "telefone_para_contato" as const },
-  { label: "Responsável", key: "nome_mae_ou_responsavel" as const },
-  { label: "Telefone do responsável", key: "telefone_responsavel" as const },
-] as const;
+interface InfoRowProps {
+  label: string;
+  value: string;
+}
 
-export function StudentDetailCard({ student }: StudentDetailCardProps) {
-  const course = student ? getStudentCourse(student) : "";
-
+function InfoRow({ label, value }: InfoRowProps) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle asChild>
-          <h2 id="dados-heading" className="flex items-center gap-2">
-            <User className="h-5 w-5 text-primary" aria-hidden="true" />
-            Dados principais
-          </h2>
-        </CardTitle>
-        <CardDescription>
-          Informações principais do aluno selecionado.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+    <div className="flex flex-col gap-1">
+      <dt className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+        {label}
+      </dt>
+      <dd className="font-medium text-foreground">{value || "—"}</dd>
+    </div>
+  );
+}
+
+export function StudentDetailCard({
+  student,
+  onViewPhoto,
+  onEdit,
+}: StudentDetailCardProps) {
+  return (
+    <Card className="overflow-hidden">
+      <div className="border-b border-border bg-success-light px-6 py-4">
+        <h2
+          id="dados-heading"
+          className="text-xs font-bold uppercase tracking-widest text-success"
+        >
+          Informações do aluno
+        </h2>
+        {student ? (
+          <p className="mt-0.5 text-lg font-bold text-foreground">
+            {student.nome_completo}
+          </p>
+        ) : (
+          <p className="mt-0.5 text-lg font-semibold text-muted-foreground">
+            Nenhum aluno selecionado
+          </p>
+        )}
+      </div>
+      <div className="px-6 py-5">
         {!student ? (
           <div className="rounded-lg border border-muted bg-muted/50 p-4 text-sm text-muted-foreground">
             Selecione um aluno nos resultados para ver seus dados principais.
           </div>
         ) : (
-          <dl className="space-y-4">
-            {fields.map(({ label, key }) => {
-              const value = student[key];
-
-              return (
-                <div key={key}>
-                  <dt className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                    {label}
-                  </dt>
-                  <dd className="mt-1 font-medium text-foreground">
-                    {value.trim() || "—"}
-                  </dd>
-                </div>
-              );
-            })}
-            <div>
-              <dt className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                Curso
-              </dt>
-              <dd className="mt-1 font-medium text-foreground">
-                {course || "—"}
-              </dd>
+          <>
+            <dl className="space-y-3.5">
+              <InfoRow
+                label="Telefone"
+                value={student.telefone_para_contato.trim()}
+              />
+              <InfoRow
+                label="Responsável"
+                value={student.nome_mae_ou_responsavel.trim()}
+              />
+              <InfoRow
+                label="Tel. do responsável"
+                value={student.telefone_responsavel.trim()}
+              />
+              <InfoRow
+                label="Inf. médicas"
+                value={(student.informacoes_saude ?? "").trim()}
+              />
+              <InfoRow label="Curso" value={getStudentCourse(student)} />
+            </dl>
+            <div className="mt-5 flex gap-2 border-t border-border pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                className="flex-1"
+                onClick={onViewPhoto}
+              >
+                Visualizar foto
+              </Button>
+              <Button
+                type="button"
+                className="flex-1 bg-primary text-primary-foreground hover:bg-primary-hover"
+                onClick={onEdit}
+              >
+                Editar
+              </Button>
             </div>
-          </dl>
+          </>
         )}
-      </CardContent>
+      </div>
     </Card>
   );
 }
