@@ -11,7 +11,7 @@ import {
 import type { SpreadsheetStudentType } from "@/types/spreadsheetStudentType";
 
 interface StudentSearchResultsCardProps {
-  hasSpreadsheetData: boolean;
+  hasSpreadsheetData: boolean  | null;
   hasSearchQuery: boolean;
   searchResults: SpreadsheetStudentType[];
   selectedResult: SpreadsheetStudentType | null;
