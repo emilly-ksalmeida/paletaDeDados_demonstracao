@@ -4,6 +4,7 @@ import { SpreadsheetUploadCard } from "./components/SpreadsheetUploadCard";
 import { Header } from "./components/Header";
 import { StudentSearchCard } from "./components/StudentSearchCard";
 import { StudentSearchResultsCard } from "./components/StudentSearchResultsCard";
+import { StudentDetailCard } from "./components/StudentDetailCard";
 
 import { parseSpreadsheetFile } from "@/lib/spreadsheet/spreadsheet";
 import { findStudentsByName } from "@/lib/spreadsheet/student-search";
@@ -180,7 +181,7 @@ export default function App() {
           />
         </aside>
         <section aria-labelledby="dados-heading">
-          <h2 id="dados-heading">Dados principais</h2>
+          <StudentDetailCard student={selectedStudent} />
         </section>
       </main>
     </div>
