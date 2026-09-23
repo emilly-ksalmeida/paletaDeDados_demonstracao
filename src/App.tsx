@@ -3,6 +3,7 @@ import { useEffect, useState, type ChangeEvent } from "react";
 import { SpreadsheetUploadCard } from "./components/SpreadsheetUploadCard";
 import { Header } from "./components/Header";
 import { StudentSearchCard } from "./components/StudentSearchCard";
+import { StudentSearchResultsCard } from "./components/StudentSearchResultsCard";
 
 import { parseSpreadsheetFile } from "@/lib/spreadsheet/spreadsheet";
 import { findStudentsByName } from "@/lib/spreadsheet/student-search";
@@ -37,13 +38,15 @@ export default function App() {
   const [persistedUploadAt, setPersistedUploadAt] = useState(
     () => getLastUploadAt() ?? "",
   );
-const [hasStoredStudents, setHasStoredStudents] = useState<boolean | null>(
+  const [hasStoredStudents, setHasStoredStudents] = useState<boolean | null>(
     null,
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<SpreadsheetStudentType[]>(
     [],
   );
+  const [selectedStudent, setSelectedStudent] =
+    useState<SpreadsheetStudentType | null>(null);
 
   function handleSearch(term: string) {
     setSearchResults(findStudentsByName(rawSpreadsheetData, term));
@@ -53,7 +56,7 @@ const [hasStoredStudents, setHasStoredStudents] = useState<boolean | null>(
     async function checkStoredStudents() {
       const exists = await hasStudents();
       setHasStoredStudents(exists);
-      
+
       if (exists) {
         setStatusTone("default");
         const students = await listAll();
@@ -168,16 +171,13 @@ const [hasStoredStudents, setHasStoredStudents] = useState<boolean | null>(
           />
         </section>
         <aside aria-labelledby="resultados-heading">
-          <h2 id="resultados-heading">Resultados da pesquisa</h2>
-          {searchResults.length > 0 ? (
-            <p className="text-sm text-muted-foreground">
-              {searchResults.length} aluno(s) encontrado(s).
-            </p>
-          ) : searchTerm ? (
-            <p className="text-sm text-muted-foreground">
-              Nenhum aluno encontrado.
-            </p>
-          ) : null}
+          <StudentSearchResultsCard
+            hasSpreadsheetData={hasStoredStudents}
+            hasSearchQuery={searchTerm.trim().length > 0}
+            searchResults={searchResults}
+            selectedResult={selectedStudent}
+            onSelectStudent={setSelectedStudent}
+          />
         </aside>
         <section aria-labelledby="dados-heading">
           <h2 id="dados-heading">Dados principais</h2>
